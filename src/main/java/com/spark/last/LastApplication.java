@@ -1,5 +1,7 @@
 package com.spark.last;
 
+import com.spark.last.model.Result;
+import com.spark.last.service.SparkService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +18,10 @@ public class LastApplication {
     }
 
 
-    @GetMapping("/hello")
-    public String hello(){
-        sparksql helloScala = new sparksql();
-        helloScala.sayHello( " my first scala!");
-        return "hello";
+    @GetMapping("/getSexData")
+    public Result hello(){
+        SparkService sparkService=new SparkService();
+        return sparkService.getSexData();
     }
 
 }
