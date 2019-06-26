@@ -16,6 +16,26 @@ public class Result {
 
     List<Float> woman;//性别女的评分合集
 
+    Result2 result2;
+
+    Result3 result3;
+
+    public Result3 getResult3() {
+        return result3;
+    }
+
+    public void setResult3(Result3 result3) {
+        this.result3 = result3;
+    }
+
+    public Result2 getResult2() {
+        return result2;
+    }
+
+    public void setResult2(Result2 result2) {
+        this.result2 = result2;
+    }
+
     public List<String> getTypes() {
         return types;
     }

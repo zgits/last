@@ -21,6 +21,7 @@ public class LastApplication {
     @GetMapping("/getSexData")
     public Result hello(){
         SparkService sparkService=new SparkService();
+        sparkService.init();
         return sparkService.getSexData();
     }
 
