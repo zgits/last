@@ -1,5 +1,7 @@
 package com.spark.last.service;
 
+import sparkservice.sparksql;
+
 /**
  * @Author: zjf
  * @Date: 2019/6/26 12:38
@@ -7,6 +9,12 @@ package com.spark.last.service;
  */
 public class test {
     public static void main(String[] args) {
-        float test= (float) 3.0;
+//        SparkService sparkService=new SparkService();
+//        sparkService.init();
+
+        sparksql sparksql=new sparksql();
+
+        sparksql.main();
+
     }
 }

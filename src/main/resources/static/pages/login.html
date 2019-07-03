@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/amazeui.min.js"></script>
+    <link rel="stylesheet" href="../css/amazeui.min.css"/>
+    <title>电影搜索</title>
+</head>
+<body>
+<div>
+    <label for="movieName">
+        电影名:
+    </label>
+    <input id="movieName" value="" placeholder="电影名字" required>
+    <button id="search">搜索</button>
+</div>
+<div class="am-g" style="height: 300px">
+    <div class="am-u-sm-12">
+        <form class="am-form">
+            <table class="am-table am-table-striped am-table-hover table-main" id="movieTable">
+                <thead>
+                <tr>
+                    <th class="table-id">电影编号</th>
+                    <th class="table-title">电影名字</th>
+                    <th class="table-author">电影类型</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    $('#search').click(function () {
+        $("#movieTable  tr:not(:first)").html('');
+        $.ajax({
+            url: "/spark/movie/searchMovies",
+            type: "POST",
+            async: false,
+            data: "movieName="+$('#movieName').val(),
+            success: function (r) {
+                console.log(r);
+                if(r.length<1){
+                    alert("没有相关电影!");
+                }
+                else {
+                    alert("查询成功!");
+                    for(var i=0;i<r.length;i++){
+                        var arr = r[i].split(",");
+                        $("#movieTable").append("<tr>\n" +
+                            "        <td>" + arr[0] + "</td>" +
+                            "        <td>" + arr[1] + "</td>\n" +
+                            "        <td>" + arr[2] + "</td>\n" +
+                            "</tr>");
+                    }
+                }
+
+            },
+            error: function (e) {
+                console.log(e);
+                alert("查询失败!");
+            }
+        });
+    })
+</script>
+</html>

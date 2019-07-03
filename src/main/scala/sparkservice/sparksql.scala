@@ -26,6 +26,10 @@ class sparksql {
   properties.setProperty("user", "root")
   properties.setProperty("password", "123456")
 
+  def main(): Unit = {
+    println(conf);
+  }
+
 
   def getUserInfo(): util.List[Row] = {
 
@@ -47,6 +51,15 @@ class sparksql {
 
     return list;
 
+  }
+
+  def getRatingInfoBySort(ids: String):util.List[Row]={
+    val ratingsdf = sqlContext.read.jdbc(url, "ratings", properties)
+
+    ratingsdf.createOrReplaceTempView("ratings")
+    var list = sqlContext.sql("select * from ratings where userId in ("+ids+") order by movieId").collectAsList()
+
+    return list;
   }
 
   def getMovieInfo(moviesId: String): util.List[Row] = {

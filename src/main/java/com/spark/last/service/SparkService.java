@@ -18,6 +18,8 @@ import java.util.*;
  */
 public class SparkService {
 
+
+
     sparksql sparksql = new sparksql();
 
 
@@ -40,6 +42,7 @@ public class SparkService {
 
     public void init(){
 
+        long startTime = System.currentTimeMillis();
         //获得所有用户信息
         userInfoList = sparksql.getUserInfo();
 
@@ -71,35 +74,47 @@ public class SparkService {
         }
         String moviesId = "";
 
-        i = 0;
 
-
+        long startTime1 = System.currentTimeMillis();
+        int start=0;
         for (Row row : userInfoList) {
             List<Double> theSameRating=new ArrayList<>();
 
-            for (Row row1 : ratingsList) {
+            for (int i1 = start; i1 < ratingsList.size(); i1++) {
+
+                Row row1=ratingsList.get(i1);
                 if(row.getInt(1)==row1.getInt(1)){
                     theSameRating.add((Double) row1.get(3));
+                    start++;
+                }else{
+                    break;
                 }
             }
 
             userRatingMap.put(row.getInt(1),theSameRating);
         }
 
+        long endTime1 = System.currentTimeMillis();    //获取结束时间
 
+        System.out.println("设置userRatingMap时间：" + (endTime1 - startTime1) + "ms");    //输出程序运行时间
+
+
+        long startTime2 = System.currentTimeMillis();
         List<Row> tempRatingsList=new ArrayList<>(ratingsList);
+
         Set<Integer> tempmovieIds = new HashSet<>(movieIds);
         //拼接打分的电影的id字符串
+
+        i = 0;
+        start=0;
         for (Integer movieId : tempmovieIds) {
-
             List<Row> theSameMovie = new ArrayList<>();
-
-
             for (Row row : tempRatingsList) {
                 if (row.get(2) == movieId) {
                     theSameMovie.add(row);
                 }
             }
+
             ratingsMap.put(movieId, theSameMovie);
 
             if (i != tempmovieIds.size() - 1) {
@@ -110,11 +125,20 @@ public class SparkService {
             i++;
 
         }
+        long endTime2 = System.currentTimeMillis();    //获取结束时间
+
+        System.out.println("设置ratingsMap时间：" + (endTime2 - startTime2) + "ms");    //输出程序运行时间
 
 
         //获取有用户打分的电影信息
         moviesList= sparksql.getMovieInfo(moviesId);
+
+        long endTime = System.currentTimeMillis();    //获取结束时间
+
+        System.out.println("获取数据时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
     }
+
+
 
 
 
