@@ -1,5 +1,7 @@
 package com.spark.last;
 
+import com.spark.last.last.getData;
+import com.spark.last.model.LastResult;
 import com.spark.last.model.Result;
 import com.spark.last.service.SparkService;
 import org.springframework.boot.SpringApplication;
@@ -23,6 +25,13 @@ public class LastApplication {
         SparkService sparkService=new SparkService();
         sparkService.init();
         return sparkService.getSexData();
+    }
+
+
+    @GetMapping("/getLast")
+    public LastResult last(){
+        getData method=new getData();
+        return method.getResults();
     }
 
 }

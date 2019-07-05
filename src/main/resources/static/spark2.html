@@ -7,6 +7,7 @@
     <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.js"></script>
     <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
     <script src="re/macarons.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 </head>
 <body>
 
@@ -20,63 +21,86 @@
 
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'),'macarons');
 
 
-    // 指定图表的配置项和数据
-    var option = {
-        title : {
-            text: '某个电影的打分情况',
-            subtext: '基于spark'
-        },
-        tooltip : {
-            trigger: 'axis'
-        },
-        toolbox: {
-            show : true,
-            feature : {
-                mark : {show: true},
-                dataView : {show: true, readOnly: false},
-                magicType : {show: true, type: ['line', 'bar']},
-                restore : {show: true},
-                saveAsImage : {show: true}
+    $(function () {
+
+        getData();
+    })
+
+    function getData() {
+        $.ajax({
+            url:'/getLast',
+            type:'get',
+            success:function (result) {
+                getLast(result.time,result.ratings);
             }
-        },
-        calculable : true,
-        xAxis : [
-            {
-                type : 'category',
-                boundaryGap : false,
-                data : ['2019-06-1','2019-06-2','2019-06-3','2019-06-4','2019-06-5','2019-06-6','2019-06-7']
-            }
-        ],
-        yAxis : [
-            {
-                type : 'value',
-            }
-        ],
-        series : [
-            {
-                name:'平均',
-                type:'line',
-                data:[8.9, 7.8, 8, 8.2, 6.5, 2.1, 6.3],
-                markPoint : {
-                    data : [
-                        {type : 'max', name: '最大值'},
-                        {type : 'min', name: '最小值'}
-                    ]
-                },
-                markLine : {
-                    data : [
-                        {type : 'average', name: '平均值'}
-                    ]
+        });
+    }
+
+    function getLast(x,y) {
+        var myChart = echarts.init(document.getElementById('main'),'macarons');
+
+
+        // 指定图表的配置项和数据
+        var option = {
+            title : {
+                text: '某个电影的打分情况',
+                subtext: '基于spark'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
                 }
-            }
-        ]
-    };
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : x,
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                }
+            ],
+            series : [
+                {
+                    name:'平均',
+                    type:'line',
+                    data:y,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
 
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
 </script>
 
 </body>
